@@ -6,9 +6,12 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: lambda_function.handler
-      Runtime: python3.9
+      Runtime: python3.10
       CodeUri: .
       Description: ''
       MemorySize: 512
       Timeout: 900
-      Role: 'arn:aws:iam::844028273225:role/lambda_s3'
+      Role: 'arn:aws:iam::736424551703:role/lambda_opensearch'
+      Environment:
+      Variables:
+      HOST: 'https://vpc-mycompanysearch-gccq4qeccwp6wna5xp6hnooily.us-east-1.es.amazonaws.com'
