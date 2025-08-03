@@ -1,2 +1,2 @@
 requests
-resuests_aws4auth
+requests_aws4auth
