@@ -14,4 +14,4 @@ Resources:
       Environment:
         # Variables must be indented UNDER Environment
         Variables:
-          HOST: 'https://vpc-mycompanysearch-gccq4qeccwp6wna5xp6hnooily.us-east-1.es.amazonaws.com'
+          HOST: 'https://vpc-open-search-final-v6dcmmyhdavsbbvnjzbmpko364.aos.us-east-1.on.aws'
