@@ -13,5 +13,5 @@ Resources:
       Timeout: 900
       Role: 'arn:aws:iam::736424551703:role/lambda_opensearch'
       Environment:
-      Variables:
-      HOST: 'https://vpc-mycompanysearch-gccq4qeccwp6wna5xp6hnooily.us-east-1.es.amazonaws.com'
+        Variables:
+        HOST: 'https://vpc-mycompanysearch-gccq4qeccwp6wna5xp6hnooily.us-east-1.es.amazonaws.com'
