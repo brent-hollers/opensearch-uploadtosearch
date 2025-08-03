@@ -7,9 +7,6 @@ authentication with the Requests module.
 # Licensed under the MIT License:
 # http://opensource.org/licenses/MIT
 
-
-from __future__ import unicode_literals
-
 import hmac
 import hashlib
 import posixpath
@@ -22,14 +19,9 @@ try:
 except ImportError:
     import collections as abc
 
-try:
-    from urllib.parse import urlparse, parse_qs, quote, unquote
-except ImportError:
-    from urlparse import urlparse, parse_qs
-    from urllib import quote, unquote
+from urllib.parse import urlparse, parse_qs, quote, unquote
 
 from requests.auth import AuthBase
-from six import PY2, text_type
 from .aws4signingkey import AWS4SigningKey
 from .exceptions import DateMismatchError, NoSecretKeyError, DateFormatError
 
@@ -548,7 +540,7 @@ class AWS4Auth(AuthBase):
         req -- Requests PreparedRequest object
 
         """
-        if isinstance(req.body, text_type):
+        if isinstance(req.body, str):
             split = req.headers.get('content-type', 'text/plain').split(';')
             if len(split) == 2:
                 ct, cs = split
@@ -615,15 +607,7 @@ class AWS4Auth(AuthBase):
         # in the signed headers, but Requests doesn't include it in a
         # PreparedRequest
         if 'host' not in headers:
-            purl = urlparse(str(req.url))
-            netloc = purl.netloc
-            # Python's http client only includes the port if it is non-default,
-            # see http.client.HTTPConnection.putrequest. The request URL, on the
-            # other hand, might explicitly include it.
-            if ((purl.port == 80 and purl.scheme == 'http')
-                or (purl.port == 443 and purl.scheme == 'https')):
-                netloc = netloc.rsplit(":", 1)[0]
-            headers['host'] = netloc
+            headers['host'] = urlparse(str(req.url)).netloc.split(':')[0]
         # Aggregate for upper/lowercase header name collisions in header names,
         # AMZ requires values of colliding headers be concatenated into a
         # single header with lowercase name.  Although this is not possible with
@@ -686,22 +670,13 @@ class AWS4Auth(AuthBase):
         if path.endswith('/') and not fixed_path.endswith('/'):
             fixed_path += '/'
         full_path = fixed_path
-        # If Python 2, switch to working entirely in str as quote() has problems
-        # with Unicode
-        if PY2:
-            full_path = full_path.encode('utf-8')
-            safe_chars = safe_chars.encode('utf-8')
-            qs = qs.encode('utf-8')
         # S3 seems to require unquoting first. 'host' service is used in
         # amz_testsuite tests
         if self.service in ['s3', 'host']:
             full_path = unquote(full_path)
         full_path = quote(full_path, safe=safe_chars)
         if qs:
-            qm = b'?' if PY2 else '?'
-            full_path = qm.join((full_path, qs))
-        if PY2:
-            full_path = unicode(full_path)
+            full_path = '?'.join((full_path, qs))
         return full_path
 
     @staticmethod
@@ -715,13 +690,7 @@ class AWS4Auth(AuthBase):
 
         """
         safe_qs_unresvd = '-_.~'
-        # If Python 2, switch to working entirely in str
-        # as quote() has problems with Unicode
-        if PY2:
-            qs = qs.encode('utf-8')
-            safe_qs_unresvd = safe_qs_unresvd.encode()
-        space = b' ' if PY2 else ' '
-        qs = qs.split(space)[0]
+        qs = qs.split(' ')[0]
         # prevent parse_qs from interpreting semicolon as an alternative delimiter to ampersand
         qs = qs.replace(';', '%3B')
         qs_items = {}
@@ -735,8 +704,6 @@ class AWS4Auth(AuthBase):
             for val in sorted(vals):
                 qs_strings.append('='.join([name, val]))
         qs = '&'.join(qs_strings)
-        if PY2:
-            qs = unicode(qs)
         return qs
 
     @staticmethod
