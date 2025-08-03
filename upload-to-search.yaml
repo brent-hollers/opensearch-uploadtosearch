@@ -12,6 +12,5 @@ Resources:
       
       # Environment must have the SAME indentation as Handler and Runtime
       Environment:
-        # Variables must be indented UNDER Environment
         Variables:
-          HOST: 'https://vpc-open-search-final-v6dcmmyhdavsbbvnjzbmpko364.aos.us-east-1.on.aws'
+          HOST: ''
