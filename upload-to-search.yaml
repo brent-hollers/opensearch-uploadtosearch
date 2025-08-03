@@ -5,13 +5,13 @@ Resources:
   uploadtosearch:
     Type: 'AWS::Serverless::Function'
     Properties:
+      # Handler, Runtime, etc. are indented under Properties
       Handler: lambda_function.handler
       Runtime: python3.10
-      CodeUri: .
-      Description: ''
-      MemorySize: 512
-      Timeout: 900
       Role: 'arn:aws:iam::736424551703:role/lambda_opensearch'
+      
+      # Environment must have the SAME indentation as Handler and Runtime
       Environment:
+        # Variables must be indented UNDER Environment
         Variables:
-        HOST: 'https://vpc-mycompanysearch-gccq4qeccwp6wna5xp6hnooily.us-east-1.es.amazonaws.com'
+          HOST: 'https://vpc-mycompanysearch-gccq4qeccwp6wna5xp6hnooily.us-east-1.es.amazonaws.com'
