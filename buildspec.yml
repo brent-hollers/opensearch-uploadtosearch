@@ -5,8 +5,8 @@ phases:
       python: 3.10
   build:
     commands:
-      - sam build --template-file search-function.yaml --use-container
-      - sam package --output-template-file search-function-output.yaml --s3-bucket hollers-artifacts-bucket-gl
+      - sam build --template-file upload-to-search.yaml --use-container
+      - sam package --output-template-file upload-to-search.yaml --s3-bucket hollers-artifacts-bucket-gl
 
 artifacts:
   type: zip
