@@ -8,7 +8,7 @@ Resources:
       # Handler, Runtime, etc. are indented under Properties
       Handler: lambda_function.handler
       Runtime: python3.10
-      Role: 'arn:aws:iam::736424551703:role/lambda_opensearch'
+      Role: 'arn:aws:iam::736424551703:role/lambda-execution-role'
       
       # Environment must have the SAME indentation as Handler and Runtime
       Environment:
